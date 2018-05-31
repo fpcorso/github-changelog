@@ -18,6 +18,10 @@ var app = new Vue({
 		loadIssues: function() {
 			fetch( 'https://api.github.com/repos/' + this.user + '/' + this.repo + '/issues?milestone=' + this.milestone + '&state=all' )
 				.then( ( response ) => {
+					if ( 422 === response.status ) {
+						alert( 'Error!' );
+						return [];
+					}
 					return response.json();
 				})
 				.then( ( issueJson ) => {
