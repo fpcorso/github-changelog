@@ -30,12 +30,12 @@
 						<label>GitHub Repo</label>
 						<select v-model="repo">
 							<option disabled value="">Please select one</option>
-							<option v-for="(r, index) in repos" v-bind:value="r">{{ r }}</option>
+							<option v-for="r in repos" v-bind:value="r">{{ r }}</option>
 						</select>
 						<label>Milestone #</label>
 						<select v-model="milestone">
 							<option disabled value="">Please select one</option>
-							<option v-for="(m, index) in milestones" v-bind:value="m.id">{{ m.name }}</option>
+							<option v-for="m in milestones" v-bind:value="m.id">{{ m.name }}</option>
 						</select>
 						<button class="pure-button pure-button-primary" v-on:click="loadIssues">Load Changelog</button>
 					</div>

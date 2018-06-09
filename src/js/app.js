@@ -3,7 +3,7 @@ var app = new Vue({
 	data: {
 		user: '',
 		repo: '',
-		milestone: 0,
+		milestone: '',
 		repos: [],
 		milestones: [],
 		issues: [],
