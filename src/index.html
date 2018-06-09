@@ -26,11 +26,17 @@
 					<h2>Enter in our repo and milestone!</h2>
 					<div class="pure-form pure-form-stacked">
 						<label>GitHub User</label>
-						<input v-model="user">
+						<input v-model.lazy="user">
 						<label>GitHub Repo</label>
-						<input v-model="repo">
+						<select v-model="repo">
+							<option disabled value="">Please select one</option>
+							<option v-for="(r, index) in repos" v-bind:value="r">{{ r }}</option>
+						</select>
 						<label>Milestone #</label>
-						<input v-model="milestone">
+						<select v-model="milestone">
+							<option disabled value="">Please select one</option>
+							<option v-for="(m, index) in milestones" v-bind:value="m.id">{{ m.name }}</option>
+						</select>
 						<button class="pure-button pure-button-primary" v-on:click="loadIssues">Load Changelog</button>
 					</div>
 				</div>

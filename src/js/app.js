@@ -1,11 +1,24 @@
 var app = new Vue({
 	el: '#app',
 	data: {
-		user: 'fpcorso',
-		repo: 'quiz_master_next',
-		milestone: 50,
+		user: '',
+		repo: '',
+		milestone: 0,
+		repos: [],
+		milestones: [],
 		issues: [],
-		format: 'HTML'
+		format: 'markdown'
+	},
+	watch: {
+		user: function (val) {
+			this.loadRepos();
+		},
+		repo: function (val) {
+			this.loadMilestones();
+		},
+		milestone: function (val) {
+			this.loadIssues();
+		}
 	},
 	methods: {
 		switchFormat: function() {
@@ -14,6 +27,40 @@ var app = new Vue({
 			} else {
 				this.format = 'HTML';
 			}
+		},
+		loadRepos: function() {
+			fetch( 'https://api.github.com/users/' + this.user + '/repos' )
+				.then( ( response ) => {
+					if ( 422 === response.status ) {
+						alert( 'Error!' );
+						return [];
+					}
+					return response.json();
+				})
+				.then( ( repoJson ) => {
+					let returnedRepos = [];
+					repoJson.forEach(repo => {
+						returnedRepos.push( repo.name );
+					});
+					this.repos = returnedRepos;
+				});
+		},
+		loadMilestones: function() {
+			fetch( 'https://api.github.com/repos/' + this.user + '/' + this.repo + '/milestones?state=all&per_page=50&direction=desc' )
+				.then( ( response ) => {
+					if ( 422 === response.status ) {
+						alert( 'Error!' );
+						return [];
+					}
+					return response.json();
+				})
+				.then( ( milestoneJson ) => {
+					let returnedMilestones = [];
+					milestoneJson.forEach(milestone => {
+						returnedMilestones.push( { id: milestone.number, name: milestone.title } );
+					});
+					this.milestones = returnedMilestones;
+				});
 		},
 		loadIssues: function() {
 			fetch( 'https://api.github.com/repos/' + this.user + '/' + this.repo + '/issues?milestone=' + this.milestone + '&state=all' )
@@ -43,7 +90,7 @@ var app = new Vue({
 						}
 					});
 					this.issues = returnedIssues;
-				})
+				});
 		}
 	},
 	mounted: function() {
