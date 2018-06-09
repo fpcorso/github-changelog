@@ -92,9 +92,6 @@ var app = new Vue({
 					this.issues = returnedIssues;
 				});
 		}
-	},
-	mounted: function() {
-		this.loadIssues();
 	}
 });
 
