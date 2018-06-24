@@ -21,6 +21,9 @@ var app = new Vue({
 		}
 	},
 	methods: {
+		/**
+		 * Switches between HTML and Markdown
+		 */
 		switchFormat: function() {
 			if ( 'HTML' === this.format ) {
 				this.format = 'markdown';
@@ -28,9 +31,14 @@ var app = new Vue({
 				this.format = 'HTML';
 			}
 		},
+		/**
+		 * Loads the repos the user owns and stores them in the app's "repos" key
+		 */
 		loadRepos: function() {
+			// Get the repos.
 			fetch( 'https://api.github.com/users/' + this.user + '/repos' )
 				.then( ( response ) => {
+					// Makes sure there is no error.
 					if ( 422 === response.status ) {
 						alert( 'Error!' );
 						return [];
@@ -38,6 +46,7 @@ var app = new Vue({
 					return response.json();
 				})
 				.then( ( repoJson ) => {
+					// Creates an array and puts the name of each repo into the array.
 					let returnedRepos = [];
 					repoJson.forEach(repo => {
 						returnedRepos.push( repo.name );
@@ -45,9 +54,14 @@ var app = new Vue({
 					this.repos = returnedRepos;
 				});
 		},
+		/**
+		 * Loads the milestones in the repo and stores them in the app's "milestones" key
+		 */
 		loadMilestones: function() {
+			// Gets the milestones.
 			fetch( 'https://api.github.com/repos/' + this.user + '/' + this.repo + '/milestones?state=all&per_page=50&direction=desc' )
 				.then( ( response ) => {
+					// Makes sure there is no error.
 					if ( 422 === response.status ) {
 						alert( 'Error!' );
 						return [];
@@ -62,9 +76,14 @@ var app = new Vue({
 					this.milestones = returnedMilestones;
 				});
 		},
+		/**
+		 * Loads the issues in the milestone and stores them in the app's "issues" key
+		 */
 		loadIssues: function() {
+			// Gets the issues.
 			fetch( 'https://api.github.com/repos/' + this.user + '/' + this.repo + '/issues?milestone=' + this.milestone + '&state=all' )
 				.then( ( response ) => {
+					// Makes sure there is no errors.
 					if ( 422 === response.status ) {
 						alert( 'Error!' );
 						return [];
@@ -73,9 +92,14 @@ var app = new Vue({
 				})
 				.then( ( issueJson ) => {
 					let returnedIssues = [];
+					// Cycle through each issue.
 					issueJson.forEach(issue => {
+						// Makes sure it is not a pull request as GitHub's API returned pull requests with the issues.
 						if ( ! issue.hasOwnProperty( 'pull_request' ) ) {
+							// Makes sure the issue is closed.
 							if ( 'closed' === issue.state ) {
+
+								// Gets the first label from the issue, if any.
 								let label = '';
 								if ( 0 < issue.labels.length ) {
 									label = issue.labels[0].name;
@@ -83,7 +107,7 @@ var app = new Vue({
 								returnedIssues.push({
 									id: issue.number,
 									title: issue.title,
-									url: issue.url,
+									url: issue.html_url,
 									label: label
 								});
 							}
