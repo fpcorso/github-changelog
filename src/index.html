@@ -1,66 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Changelog Generator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 	<link rel="stylesheet" type="text/css" media="screen" href="css/app.css" />
 </head>
 <body>
-	<header>
-		<h1>Milestone Changelog Generator</h1>
+	<header class="section">
+		<h1 class="title is-1">Milestone Changelog Generator</h1>
 	</header>
 	<main>
-		<section>
-			<div class="section-content">
-				<h2>What is this?</h2>
-				<p>Have you ever needed to generate a changelog for a milestone in GitHub?</p>
-				<p>That is what this does. Generates a changlog from the issues attached to a milestone.</p>
+		<section class="section">
+			<div class="card">
+				<div class="card-content">
+					<h2 class="title">What is this?</h2>
+					<p>Have you ever needed to generate a changelog for a milestone in GitHub?</p>
+					<p>That is what this does. Generates a changlog from the issues attached to a milestone.</p>
+				</div>
 			</div>
 		</section>
-		<div id="app">
-			<section>
-				<div class="section-content">
-					<h2>Enter in your repo and milestone...</h2>
-					<div class="pure-form pure-form-stacked">
-						<label>GitHub User</label>
-						<input v-model.lazy="user">
-						<label>GitHub Repo</label>
-						<select v-model="repo">
-							<option disabled value="">Please select one</option>
-							<option v-for="r in repos" v-bind:value="r">{{ r }}</option>
-						</select>
-						<label>Milestone #</label>
-						<select v-model="milestone">
-							<option disabled value="">Please select one</option>
-							<option v-for="m in milestones" v-bind:value="m.id">{{ m.name }}</option>
-						</select>
-						<button class="pure-button pure-button-primary" v-on:click="loadIssues">Load Changelog</button>
+		<section class="section">
+			<div class="card">
+				<div class="card-content">
+					<h2 class="title">Enter in your repo and milestone...</h2>
+					<div class="field">
+						<label for="user" class="label">GitHub User</label>
+						<div class="control">
+							<input id="user" type="text" class="input">
+						</div>
+					</div>
+					<div class="field">
+						<label for="repo" class="label">GitHub Repo</label>
+						<div class="select">
+							<select id="repo"></select>
+						</div>
+					</div>
+					<div class="field">
+						<label for="milestone" class="label">Milestone</label>
+						<div class="select">
+							<select id="milestone">
+								<option disabled value="">Please select one</option>
+							</select>
+						</div>
 					</div>
 				</div>
-			</section>
-			<section>
-				<div class="section-content">
-					<h2>...get a changelog!</h2>
-					<button class="pure-button pure-button-primary" v-on:click="switchFormat">Switch between HTML and Markdown</button>
-					<ul class="issues">
-						<issue
-							v-bind:format="format"
-							v-for="item in issues"
-							v-bind:issue="item"
-							v-bind:key ="item.number">
-						</issue>
-					</ul>
+			</div>
+		</section>
+		<section class="section">
+			<div class="card">
+				<div class="card-content">
+					<h2 class="title">...get a changelog!</h2>
+					<button type="button" id="switch-button" class="button is-info">Switch between HTML and Markdown</button>
+					<ul id="issues"></ul>
 				</div>
-			</section>
-		</div>
+			</div>
+		</section>
 	</main>
 	<footer>
-		<p>Made by <a href="https://frankcorso.me">Frank Corso</a>. <a href="https://github.com/fpcorso/github-changelog">Contribute on GitHub</a>.</p>
+		<div class="has-text-centered">
+			<p>Made by <a href="https://frankcorso.me">Frank Corso</a>. <a href="https://github.com/fpcorso/github-changelog">Contribute on GitHub</a>.</p>
+		</div>
 	</footer>
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="js/app.js"></script>
 </body>
 </html>
